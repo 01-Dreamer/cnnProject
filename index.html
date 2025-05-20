@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写数字识别</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #e0e7ff, #d1e3ff);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 700px;
+            text-align: center;
+        }
+        h1 {
+            color: #1a3c6d;
+            font-size: 32px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        input[type="file"] {
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 350px;
+            padding: 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f9fafb;
+            transition: border-color 0.3s;
+        }
+        input[type="file"]:hover {
+            border-color: #3b82f6;
+        }
+        input[type="submit"] {
+            background-color: #3b82f6;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            width: 100%;
+            max-width: 350px;
+        }
+        input[type="submit"]:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 28px;
+            color: #16a34a;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .error {
+            color: #dc2626;
+            background-color: #fee2e2;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .image-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .image-box {
+            text-align: center;
+        }
+        .image-box img {
+            max-width: 200px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 8px;
+            background-color: #fff;
+        }
+        .image-box p {
+            margin: 12px 0 0;
+            font-size: 16px;
+            color: #4b5563;
+            font-weight: 500;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+                margin: 15px;
+            }
+            .image-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .image-box img {
+                max-width: 120px;
+            }
+            input[type="file"], input[type="submit"] {
+                max-width: 100%;
+            }
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>手写数字识别</h1>
+        <form class="upload-form" method="post" enctype="multipart/form-data">
+            <input type="file" name="image" accept="image/*" required>
+            <input type="submit" value="上传并预测">
+        </form>
+        {% if result %}
+        <div class="result {{ 'error' if '错误' in result else '' }}">{{ result }}</div>
+        {% endif %}
+        {% if original_image or debug_image %}
+        <div class="image-container">
+            {% if original_image %}
+            <div class="image-box">
+                <p>原始图片</p>
+                <img src="data:image/png;base64,{{ original_image }}" alt="原始图片">
+            </div>
+            {% endif %}
+            {% if debug_image %}
+            <div class="image-box">
+                <p>预处理图片 (28x28)</p>
+                <img src="{{ debug_image }}" alt="预处理图片">
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
